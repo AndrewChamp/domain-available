@@ -3,41 +3,41 @@
   class available{
 		
 		
-		private $domains = array();
-		private $status = true;
-		private $available = null;
-		private $ext = '.txt';
+	private $domains = array();
+	private $status = true;
+	private $available = null;
+	private $ext = '.txt';
 		
 		
-		public function __construct($_domains=null, $_email){
-			if($_domains == null)
-				throw new Exception('You need to specify the domains to check in '.__CLASS__.' class.');
-				
-			$this->domains = $_domains;
-			$this->email = $_email;
+	public function __construct($_domains=null, $_email){
+		if($_domains == null)
+			throw new Exception('You need to specify the domains to check in '.__CLASS__.' class.');
 			
-			if(count($this->domains) > 1):
-				foreach($this->domains as $dom):
-					$this->check($dom);
-					if($this->status && !file_exists($dom.$this->ext)):
-						$this->available .= $dom."\r\n";
-						$this->cache($dom);
-					endif;
-					$this->reset();
-				endforeach;
-			else:
-				$this->check($this->domains);
-				if($this->status && !file_exists($this->domains.$this->ext)):
-					$this->available = $this->domains."\r\n";
-					$this->cache($this->domains);
+		$this->domains = $_domains;
+		$this->email = $_email;
+			
+		if(count($this->domains) > 1):
+			foreach($this->domains as $dom):
+				$this->check($dom);
+				if($this->status && !file_exists($dom.$this->ext)):
+					$this->available .= $dom."\r\n";
+					$this->cache($dom);
 				endif;
+				$this->reset();
+			endforeach;
+		else:
+			$this->check($this->domains);
+			if($this->status && !file_exists($this->domains.$this->ext)):
+				$this->available = $this->domains."\r\n";
+				$this->cache($this->domains);
 			endif;
-			
-			if($this->available != null)
-				$this->mailer();
+		endif;
+		
+		if($this->available != null)
+			$this->mailer();
 		}
-		
-		
+	
+	
 		public function __destruct(){
 			$this->reset();
 		}
